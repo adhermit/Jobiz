@@ -71,12 +71,12 @@ class Job
         return $this;
     }
     
-    public function getCompanyName(): ?Company
+    public function getCompany(): ?Company
     {
         return $this->companies;
     }
 
-    public function setCompanyName(?Company $company): static
+    public function setCompany(?Company $company): static
     {
         $this->companies = $company;
 

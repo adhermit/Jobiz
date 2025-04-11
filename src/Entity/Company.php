@@ -34,7 +34,7 @@ class Company
     /**
      * @var Collection<int, Job>
      */
-    #[ORM\OneToMany(targetEntity: Job::class, mappedBy: 'companies')]
+    #[ORM\OneToMany(targetEntity: Job::class, mappedBy: 'company')]
     private Collection $jobs;
 
     public function __construct()
@@ -119,7 +119,7 @@ class Company
     {
         if (!$this->jobs->contains($job)) {
             $this->jobs->add($job);
-            $job->setCompanies($this);
+            $job->setCompany($this);
         }
 
         return $this;
@@ -129,8 +129,8 @@ class Company
     {
         if ($this->jobs->removeElement($job)) {
             // set the owning side to null (unless already changed)
-            if ($job->getCompanies() === $this) {
-                $job->setCompanies(null);
+            if ($job->getCompany() === $this) {
+                $job->setCompany(null);
             }
         }
 
