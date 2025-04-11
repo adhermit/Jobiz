@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {{job.title}}{% endblock %}
+
+{% block body %}
+<section class="text-slate-700 body-font bg-white">
+    <div class="container px-5 py-24 mx-auto flex flex-wrap">
+      <div class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center">
+        <div class="flex flex-col mb-10 lg:items-start items-center">
+          <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-5">
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+          </div>
+          <div class="w-full sm:p-4 px-4 mb-6">
+            <h1 class="title-font font-medium text-3xl mb-2 text-slate-700">
+                {{job.title}}
+            </h1>
+            <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
+                <h4 class="title-font font-medium text-xl text-slate-700">
+                    {{ job.company.name }}
+                </h4>
+                <p class="leading-relaxed">Post date</p>
+              </div>
+              <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
+                <h4 class="title-font font-medium text-xl text-slate-700">
+                    {{ job.postDate|date('Y') }}
+                </h4>
+                <p class="leading-relaxed">Post date</p>
+              </div>
+            <div class="leading-relaxed">
+              <p class="text-base leading-relaxed mt-2">{{ job.description}}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
