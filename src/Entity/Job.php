@@ -61,7 +61,7 @@ class Job
 
     public function getTitle(): ?string
     {
-        return $this->title."hello";
+        return $this->title;
     }
 
     public function setTitle(string $title): static
