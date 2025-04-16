@@ -1,57 +1,108 @@
 {% extends "base.html.twig" %}
 
-{% block title %} {{job.title}}{% endblock %}
+{% block title %}{{ job.title }}{% endblock %}
 
 {% block body %}
 
 <section class="text-slate-700 body-font bg-white">
-    <div class="container px-5 py-24 mx-auto flex justify-center">
-      <div class="flex flex-col flex-wrap lg:py-6 -mb-10 w-full max-w-3xl text-justify">
-        <div class="flex flex-col mb-10 lg:items-start items-center">
-          <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-5">
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-            </svg>
-          </div>
-          <div class="w-full sm:p-4 px-4 mb-6">
-            <h1 class="title-font font-medium text-3xl mb-2 text-slate-700">
-                {{job.title}}
-            </h1>
-            <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
+
+  <aside style="width: 25%; min-width: 250px;" class="bg-light p-3 border-end">
+    <form method="get" action="{{ path('app_job_list') }}" class="bg-white p-3 border rounded">
+      <h2>Filtres</h2>
+
+      <div class="p-3 border-bottom">
+        <input type="text" name="search" id="search" class="form-control" placeholder="Search"
+               value="{{ app.request.get('search') }}" />
+      </div>
+
+      <div class="p-3 border-bottom">
+        <label for="price">Salary</label>
+        <div class="input-group mb-2">
+          <input type="number" name="min_salary" id="min_salary" class="form-control"
+                 placeholder="Minimum Salary" value="{{ app.request.get('minimumSalary') }}" />
+          <span class="input-group-text">€</span>
+        </div>
+        <div class="input-group">
+          <input type="number" name="max_salary" id="max_salary" class="form-control"
+                 placeholder="Maximum Salary" value="{{ app.request.get('maximumSalary') }}" />
+          <span class="input-group-text">€</span>
+        </div>
+      </div>
+
+      <div class="p-3 border-bottom">
+        <label for="category">Category</label>
+        <select name="category" id="category" class="form-select">
+          {% for category in categories %}
+            <option value="{{ category.id }}"
+                    {% if app.request.get('category') == category.id %}selected{% endif %}>
+              {{ category.type }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+      </div>
+    </form>
+  </aside>
+
+      <div class="container px-5 py-24 mx-auto flex justify-center">
+        <div class="flex flex-col flex-wrap lg:py-6 -mb-10 w-full max-w-3xl text-justify">
+          <div class="flex flex-col mb-10 lg:items-start items-center">
+            <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-5">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                   stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>
+            </div>
+
+            <div class="w-full sm:p-4 px-4 mb-6">
+              <h1 class="title-font font-medium text-3xl mb-2 text-slate-700">
+                {{ job.title }}
+              </h1>
+
+              <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
                 <h4 class="title-font font-medium text-xl text-slate-700">
-                    {{ job.company.name }}
+                  {{ job.company.name }}
                 </h4>
                 <p class="leading-relaxed">Company Name</p>
               </div>
+
               <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
                 <h4 class="title-font font-medium text-xl text-slate-700">
-                    {{ job.postDate|date('Y') }}
+                  {{ job.postDate|date('Y') }}
                 </h4>
-                <p class="leading-relaxed">Post date</p>
+                <p class="leading-relaxed">Post Date</p>
               </div>
+
               <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
-                <h4 class="title-font font-medium text-xl text-slate-700" >
+                <h4 class="title-font font-medium text-xl text-slate-700">
                   {% for category in job.categories %}
-                    <a class="bg-gray-700 text-blue-500 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300 hover:bg-blue-500 hover:text-white" href="{{ path('app_category_show', {'id': category.id}) }}">
-                      {{ category.type }}</a>
+                    <a class="bg-gray-700 text-blue-500 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm 
+                              dark:bg-blue-900 dark:text-blue-300 hover:bg-blue-500 hover:text-white"
+                       href="{{ path('app_category_show', {'id': category.id}) }}">
+                      {{ category.type }}
+                    </a>
                   {% endfor %}
                 </h4>
                 <p class="leading-relaxed">Job Category</p>
               </div>
+
               <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
                 <h4 class="title-font font-medium text-xl text-slate-700">
-                  {{ job.salaryrange}}
-              </h4>
+                  {{ job.salaryrange }}
+                </h4>
                 <p class="leading-relaxed">Salary Range</p>
               </div>
-            <div class="leading-relaxed">
-              <p class="text-base leading-relaxed mt-2">{{ job.description}}</p>
+
+              <div class="leading-relaxed mt-4">
+                <p class="text-base leading-relaxed">{{ descriptionHtml|raw }}</p>
+              </div>
             </div>
           </div>
         </div>
-
       </div>
-    </div>
-  </section>
+    </section>
 
 {% endblock %}

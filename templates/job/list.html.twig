@@ -1,19 +1,66 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}Job list{% endblock %}
-
 
 {% block body %}
 <section class="text-slate-700 bg-white body-font container px-5 py-14 mx-auto">
-    <div class="container px-5 py-24 mx-auto">
-      <div class="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4">
-        {% for job in jobs %}
 
-        {% include 'job/_job_item.html.twig' with {'job': job} %}
-            
-        {% endfor %}
-      </div>
+        <aside class="bg-light p-3 border-end mb-4">
+          <form method="get" action="{{ path('app_job_list') }}" class="bg-white p-3 border rounded">
+            <h2>Filtres</h2>
+      
+            <div class="p-3 border-bottom">
+              <input type="text" name="search" id="search" class="form-control" placeholder="Search"
+                     value="{{ app.request.get('search') }}" />
+            </div>
+      
+            <div class="p-3 border-bottom">
+              <label for="price">Salary</label>
+              <div class="input-group mb-2">
+                <input type="number" name="min_salary" id="min_salary" class="form-control"
+                       placeholder="Minimum Salary" value="{{ app.request.get('minimumSalary') }}" />
+                <span class="input-group-text">€</span>
+              </div>
+              <div class="input-group">
+                <input type="number" name="max_salary" id="max_salary" class="form-control"
+                       placeholder="Maximum Salary" value="{{ app.request.get('maximumSalary') }}" />
+                <span class="input-group-text">€</span>
+              </div>
+            </div>
+      
+            <div class="p-3 border-bottom">
+              <label for="category">Category</label>
+              <select name="category" id="category" class="form-select">
+                {% for category in categories %}
+                  <option value="{{ category.id }}"
+                          {% if app.request.get('category') == category.id %}selected{% endif %}>
+                    {{ category.type }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+      
+            <div class="mt-3">
+              <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+            </div>
+          </form>
+        </aside>
+
+    <div class="container px-5 py-12 mx-auto">
+       
+        {% if search is defined and search is not empty %}
+            <h2 class="text-2xl font-semibold mb-8">Search Results for: "{{ search }}"</h2>
+        {% endif %}
+
+        {% if jobs is empty %}
+            <p class="text-gray-500">No jobs found{{ search is defined and search is not empty ? ' for "' ~ search ~ '"' : '' }}.</p>
+        {% endif %}
+
+        <div class="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4">
+            {% for job in jobs %}
+                {% include 'job/_job_item.html.twig' with {'job': job} %}
+            {% endfor %}
+        </div>
     </div>
-  </section>
+</section>
 {% endblock %}
