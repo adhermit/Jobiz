@@ -40,8 +40,17 @@ final class JobController extends AbstractController
     }
 
     #[Route('/job/{id}', name: 'app_job_show')]
-    public function show(Job $job, CategoryRepository $categoryRepository): Response
+    public function show(Request $request, Job $job, JobRepository $jobRepository, CategoryRepository $categoryRepository): Response
     {
+        $search = $request->query->get('search');
+        $minimumSalary = $request->query->get('minimum_salary');
+        $maximumSalary = $request->query->get('maximum_salary');
+        $country = $request->query->get('country');
+        $city = $request->query->get('city');
+        $selectedCategory = $request->query->get('category');
+
+        $filteredJobs = $jobRepository->findBySearch($search, $minimumSalary, $maximumSalary, $country, $city, $selectedCategory);
+
         $converter = new CommonMarkConverter();
         $descriptionHtml = $converter->convert($job->getDescription())->getContent();
 
@@ -51,28 +60,54 @@ final class JobController extends AbstractController
             'job' => $job,
             'descriptionHtml' => $descriptionHtml,
             'categories' => $category,
+            'filteredJobs' => $filteredJobs,
+            'search' => $search,
         ]);
     }
 
     #[Route('/job/search', name: 'app_job_search')]
     public function search(Request $request, JobRepository $jobRepository, CategoryRepository $categoryRepository): Response
     {
-        $search = $request->request->get('search');
-        $minimumSalary = $request->request->get('minimum_salary');
-        $maximumSalary = $request->request->get('maximum_salary');
-        $country = $request->request->get('country');
-        $city = $request->request->get('city');
-        $category = $request->request->get('category');
+    $search = $request->query->get('search');
+    $minSalary = $request->query->get('minimum_salary');
+    $maxSalary = $request->query->get('maximum_salary');
+    $country = $request->query->get('country');
+    $city = $request->query->get('city');
+    $categoryId = $request->query->get('category');
 
-        $jobs = $jobRepository->findBySearch($search, $minimumSalary, $maximumSalary, $country, $city);
-        
-        $category = $categoryRepository->findAll();
+    $qb = $jobRepository->createQueryBuilder('j');
 
-        return $this->render('job/search.html.twig', [
-            'jobs' => $jobs,
-            'color' => 'white',
-            'search' => $search
-        ]);
+    if ($search) {
+        $qb->andWhere('j.title LIKE :search OR j.description LIKE :search')
+           ->setParameter('search', '%' . $search . '%');
     }
 
+    if ($minSalary) {
+        $qb->andWhere('j.minSalary >= :minSalary')
+           ->setParameter('minSalary', $minSalary);
+    }
+
+    if ($maxSalary) {
+        $qb->andWhere('j.maxSalary <= :maxSalary')
+           ->setParameter('maxSalary', $maxSalary);
+    }
+
+    if ($country) {
+        $qb->andWhere('j.country = :country')
+           ->setParameter('country', $country);
+    }
+
+    if ($city) {
+        $qb->andWhere('j.city = :city')
+           ->setParameter('city', $city);
+    }
+
+    if ($categoryId) {
+        $qb->join('j.categories', 'c')
+           ->andWhere('c.id = :categoryId')
+           ->setParameter('categoryId', $categoryId);
+    }
+
+    return $qb->getQuery()->getResult();
+    }
 }

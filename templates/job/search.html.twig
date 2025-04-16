@@ -9,18 +9,23 @@
     {% if jobs is not empty %}
       {% for job in jobs %}
         <div class="border-b py-4">
-          <h3 class="text-xl font-bold text-blue-700">{{ job.title }}</h3>
+          <h3 class="text-xl font-bold text-blue-700">
+            <a href="{{ path('app_job_show', {'id': job.id}) }}">
+            {{ job.title }}</a></h3>
           <p class="text-gray-700">{{ job.company.name }} - {{ job.salaryrange }}</p>
           <p class="text-sm text-gray-500">
             Categories:
-            {% for category in job.categories %}
-              <span class="inline-block bg-gray-200 rounded px-2 py-1 text-xs mr-2">{{ category.type }}</span>
-            {% endfor %}
-          </p>
+            {% if job.categories is not empty %}
+                {% for category in job.categories %}
+                    <span class="inline-block bg-gray-200 rounded px-2 py-1 text-xs mr-2">{{ category.type }}</span>
+                {% endfor %}
+            {% else %}
+                <span class="italic text-gray-400">No categories assigned</span>
+            {% endif %}
+        </p>
         </div>
       {% endfor %}
     {% else %}
-      <p class="text-gray-600 italic">No jobs found matching your search.</p>
-    {% endif %}
+    <p class="text-gray-600 italic text-center mt-8">No jobs found matching your search criteria.</p>    {% endif %}
   </div>
 {% endblock %}
