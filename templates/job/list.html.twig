@@ -62,5 +62,26 @@
             {% endfor %}
         </div>
     </div>
+
+    {% if totalPages > 1 %}
+  <div class="flex justify-center mt-10 space-x-2">
+    {% if page > 1 %}
+      <a href="{{ path('app_job_list', app.request.query.all | merge({'page': page - 1})) }}"
+         class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">&laquo; Prev</a>
+    {% endif %}
+
+    {% for i in 1..page %}
+      <a href="{{ path('app_job_list', app.request.query.all | merge({'page': i})) }}"
+         class="px-4 py-2 rounded {{ i == page ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300' }}">
+        {{ i }}
+      </a>
+    {% endfor %}
+
+    {% if page < totalPages %}
+      <a href="{{ path('app_job_list', app.request.query.all | merge({'page': page + 1})) }}"
+         class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next &raquo;</a>
+    {% endif %}
+  </div>
+{% endif %}
 </section>
 {% endblock %}

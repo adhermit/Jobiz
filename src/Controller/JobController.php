@@ -24,7 +24,9 @@ final class JobController extends AbstractController
         $page = $request->query->getInt('page', 1);
         $limit = 10;
 
-        $jobs = $jobRepository->findAll();
+        $jobs = $jobRepository->findBy([], null, $limit, ($page - 1) * $limit);
+        $totalJobs = $jobRepository->count([]);
+        $totalPages = ceil($totalJobs / $limit);
         $category = $categoryRepository->findAll();
 
         return $this->render('job/list.html.twig', [
@@ -33,6 +35,7 @@ final class JobController extends AbstractController
             'categories' => $category,
             'page' => $page,
             'limit' => $limit,
+            'totalPages' => $totalPages,
         ]);
     }
 
