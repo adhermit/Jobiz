@@ -20,23 +20,19 @@ final class JobController extends AbstractController
     #[Route('/job/list', name: 'app_job_list')]
     public function index(Request $request, JobRepository $jobRepository, CategoryRepository $categoryRepository): Response
     {
-        $search = $request->request->get('search');
-        $minimumSalary = $request->request->get('minimum_salary');
-        $maximumSalary = $request->request->get('maximum_salary');
-        $country = $request->request->get('country');
-        $city = $request->request->get('city');
-        $category = $request->request->get('category');
-        $jobs = $jobRepository->findBySearch($search, $minimumSalary, $maximumSalary, $country, $city);
 
-        $category = $categoryRepository->findAll();
+        $page = $request->query->getInt('page', 1);
+        $limit = 10;
 
         $jobs = $jobRepository->findAll();
-        $jobs = $jobRepository->findBySearch($search, $minimumSalary, $maximumSalary, $country, $city); 
+        $category = $categoryRepository->findAll();
 
         return $this->render('job/list.html.twig', [
             'jobs' => $jobs,
             'color' => 'white',
             'categories' => $category,
+            'page' => $page,
+            'limit' => $limit,
         ]);
     }
 
@@ -56,11 +52,18 @@ final class JobController extends AbstractController
     }
 
     #[Route('/job/search', name: 'app_job_search')]
-    public function search(Request $request, JobRepository $jobRepository): Response
+    public function search(Request $request, JobRepository $jobRepository, CategoryRepository $categoryRepository): Response
     {
-        $search = $request->query->get('search');
+        $search = $request->request->get('search');
+        $minimumSalary = $request->request->get('minimum_salary');
+        $maximumSalary = $request->request->get('maximum_salary');
+        $country = $request->request->get('country');
+        $city = $request->request->get('city');
+        $category = $request->request->get('category');
 
-        $jobs = $jobRepository->findBySearch($search);
+        $jobs = $jobRepository->findBySearch($search, $minimumSalary, $maximumSalary, $country, $city);
+        
+        $category = $categoryRepository->findAll();
 
         return $this->render('job/search.html.twig', [
             'jobs' => $jobs,

@@ -44,14 +44,14 @@ class Job
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'jobs')]
-    private Collection $categories;
+    private Collection $category;
 
     #[ORM\ManyToOne(inversedBy: 'jobs')]
     private ?Company $companies = null;
 
     public function __construct()
     {
-        $this->categories = new ArrayCollection();
+        $this->category = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -185,15 +185,15 @@ class Job
     /**
      * @return Collection<int, Category>
      */
-    public function getCategories(): Collection
+    public function getCategory(): Collection
     {
-        return $this->categories;
+        return $this->category;
     }
 
     public function addCategory(Category $category): static
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
+        if (!$this->category->contains($category)) {
+            $this->category->add($category);
         }
 
         return $this;
@@ -201,7 +201,7 @@ class Job
 
     public function removeCategory(Category $category): static
     {
-        $this->categories->removeElement($category);
+        $this->category->removeElement($category);
 
         return $this;
     }

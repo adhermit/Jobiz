@@ -27,7 +27,23 @@ class JobRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
+    public function findPaginated(int $page, int $limit = 10): array
+    {
+        return $this->createQueryBuilder('j')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countAllJobs(): int
+    {
+        return (int) $this->createQueryBuilder('j')
+            ->select('COUNT(j.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     
     //    /**
     //     * @return Job[] Returns an array of Job objects
