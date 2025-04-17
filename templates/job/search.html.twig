@@ -20,13 +20,13 @@
             {% endif %}
         </h3>
           <p class="text-gray-700">
-            {% if job.company is not null %}
-              {{ job.company.name }}
-            {% else %}
-              Company information not available.
-            {% endif %}
-            — {{ job.minSalary }} - {{ job.maxSalary }}
-          </p>
+  {% if job.company is iterable %}
+    {{ job.company.name }}
+  {% else %}
+    {{ job.company }}
+  {% endif %}
+  — {{ job.minSalary }} - {{ job.maxSalary }}
+</p>
           <p class="text-sm text-gray-500">Location: {{ job.city }}, {{ job.country }}</p>
           <p class="text-sm text-gray-500">
             Categories:
