@@ -5,8 +5,8 @@
 {% block body %}
 
 <section class="text-slate-700 body-font bg-white">
-
-  <aside class="bg-light p-3 border-end mb-4">
+  <div class="container mx-auto px-5 py-10 flex flex-wrap lg:flex-nowrap"> 
+  <aside class="bg-light p-3 border-end mb-4 lg:w-1/4 w-full">
     <form method="get" action="{{ path('app_job_search') }}" class="bg-white p-3 border rounded">
         <h2>Search Jobs</h2>
 
@@ -26,8 +26,8 @@
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
     </form>
   </aside>
-
-      <div class="container px-5 py-24 mx-auto flex justify-center">
+  <div class="lg:w-3/4 w-full lg:pl-10">
+      <div class="container px-5 py-24 mx-auto">
         <div class="flex flex-col flex-wrap lg:py-6 -mb-10 w-full max-w-3xl text-justify">
           <div class="flex flex-col mb-10 lg:items-start items-center">
             <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-5">
@@ -83,6 +83,8 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </div> 
+</section>
 
 {% endblock %}

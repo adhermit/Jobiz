@@ -108,6 +108,17 @@ final class JobController extends AbstractController
            ->setParameter('categoryId', $categoryId);
     }
 
-    return $qb->getQuery()->getResult();
+    $jobs = $qb->getQuery()->getResult();
+
+    return $this->render('job/search.html.twig', [
+        'jobs' => $jobs,
+        'search' => $search,
+        'minSalary' => $minSalary,
+        'maxSalary' => $maxSalary,
+        'country' => $country,
+        'city' => $city,
+        'categoryId' => $categoryId,
+        'categories' => $categoryRepository->findAll()
+    ]);
     }
 }
