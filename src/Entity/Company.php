@@ -37,6 +37,8 @@ class Company
     #[ORM\OneToMany(targetEntity: Job::class, mappedBy: 'company')]
     private Collection $jobs;
 
+
+
     public function __construct()
     {
         $this->jobs = new ArrayCollection();
@@ -107,6 +109,12 @@ class Company
         return $this;
     }
 
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     /**
      * @return Collection<int, Job>
      */
@@ -135,10 +143,5 @@ class Company
         }
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->name;
     }
 }

@@ -38,8 +38,8 @@ class JobCrudController extends AbstractCrudController
                 'Internship' => 'Internship',
                 'Freelance' => 'Freelance',
             ]),
-            TextField::new('company'),
-            AssociationField::new('category')
+            AssociationField::new('company'),
+            AssociationField::new('categories')
                 ->setFormTypeOption('choice_label', 'type'),
         ];
     }

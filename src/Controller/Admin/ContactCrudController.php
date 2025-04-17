@@ -9,7 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class Contact2CrudController extends AbstractCrudController
+class ContactCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
@@ -21,7 +21,10 @@ class Contact2CrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
-            TextEditorField::new('messages')->setFormTypeOption('disabled', 'disabled'),
+            TextField::new('fullname'),
+            TextField::new('email'),
+            TextField::new('subject'),
+            TextEditorField::new('messages'),
             ChoiceField::new('status')->setChoices([
                     'Unread' => 'unread',
                     'Read' => 'read',

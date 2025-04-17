@@ -40,18 +40,20 @@ class Job
     #[ORM\Column(nullable: true)]
     private ?int $maxSalary = null;
 
+    
+
     /**
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'jobs')]
-    private Collection $category;
+    private Collection $categories;
 
-    #[ORM\Column(type: 'string', length: 255)]    
-    private ?string $company = null;
+    #[ORM\ManyToOne(inversedBy: 'jobs')]
+    private ?Company $company = null;
 
     public function __construct()
     {
-        $this->category = new ArrayCollection();
+        $this->categories = new ArrayCollection();
         $this->minSalary = 0;
         $this->maxSalary = 0;
     }
@@ -69,18 +71,6 @@ class Job
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
-        return $this;
-    }
-    
-    public function getCompany(): string
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?string $company): self
-    {
-        $this->company = $company;
 
         return $this;
     }
@@ -189,21 +179,33 @@ class Job
      */
     public function getCategories(): Collection
     {
-        return $this->category;
+        return $this->categories;
     }
 
-    public function addCategory(Category $category): static
+    public function addCategory(Category $categories): static
     {
-        if (!$this->category->contains($category)) {
-            $this->category->add($category);
+        if (!$this->categories->contains($categories)) {
+            $this->categories->add($categories);
         }
 
         return $this;
     }
 
-    public function removeCategory(Category $category): static
+    public function removeCategory(Category $categories): static
     {
-        $this->category->removeElement($category);
+        $this->categories->removeElement($categories);
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }
