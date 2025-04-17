@@ -80,7 +80,7 @@ final class JobController extends AbstractController
             $em->persist($application);
             $em->flush();
         
-            $this->addFlash('success', 'Your application has been submitted!');
+            
         
             // Redirect with query param to indicate success
             return $this->redirectToRoute('app_job_show', ['id' => $job->getId(), 'applied' => 1]);
