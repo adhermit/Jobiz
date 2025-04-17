@@ -47,9 +47,13 @@
 
       <!-- Company Name -->
       <div>
-        <p class="text-sm text-gray-500 mb-1">Company Name</p>
-        <h4 class="text-lg font-semibold text-indigo-700">{{ job.company.name }}</h4>
-      </div>
+  <p class="text-sm text-gray-500 mb-1">Company Name</p>
+  {% if job.company is defined and job.company %}
+    <h4 class="text-lg font-semibold text-indigo-700">{{ job.company.name }}</h4>
+  {% else %}
+    <h4 class="text-lg font-semibold text-indigo-700">Company information not available.</h4>
+  {% endif %}
+</div>
 
       <!-- Post Date -->
       <div>
