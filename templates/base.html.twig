@@ -23,16 +23,19 @@
                 <a class="mr-5 hover:text-gray-900" href="{{path('app_home')}}">Home</a>
                 <a class="mr-5 hover:text-gray-900"href="{{path('app_job_list')}}" >Job list</a>
                 <a class="mr-5 hover:text-gray-900" href="{{path('app_about')}}">About Us</a>
-                <a class="mr-5 hover:text-gray-900">contact Us</a>
               </nav>
-              <form method="get" action="{{path('app_job_search')}}" class="relative bg-white">
-                <input type="text" name="search" class="border border-gray-300 rounded-lg py-2 px-4 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search..." value="{{ app.request.get('search') }}"/>
-                <button type="submit" class="absolute right-3 top-1/2 m-0 p-0 transform -translate-y-1/2 text-gray-500 hover:text-gray-700" >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">  
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2a7.5 7.5 0 010 15z">                    </path>
-                  </svg>
-                <button type="submit" class="absolute right-5px top-50% mt-2 mr-2 text-gray-500 hover:text-gray-700">
-              </form>
+              <div class="flex md:flex-nowrap flex-wrap justify-center items-end md:justify-start px-3">
+                <div class="relative sm:w-64 w-40 sm:mr-4 mr-2">
+                  <input
+                    placeholder="Search"
+                    ="text"
+                    id="footer-field"
+                    name="footer-field"
+                    class="w-full bg-white bg-opacity-40 rounded border border-gray-700 focus:ring-2 focus:ring-slate-900 focus:bg-transparent focus:border-slate-150 text-base outline-none text-slate-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  />
+                </div>
+                <button class="inline-flex text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">OK</button>
+              </div>
               <div>
                 {% if app.user %}
                 {% if is_granted('ROLE_ADMIN')%}
