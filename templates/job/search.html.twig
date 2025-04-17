@@ -3,29 +3,44 @@
 {% block title %}Search Job{% endblock %}
 
 {% block body %}
-  <div class="max-w-4xl mx-auto p-4">
+<section class="bg-white">
+  <div class="max-w-4xl mx-auto p-4 bg-white">
     <h2 class="text-2xl font-semibold mb-6">Search Results for "{{ search }}"</h2>
 
     {% if jobs is not empty %}
       {% for job in jobs %}
         <div class="border-b py-4">
-          <h3 class="text-xl font-bold text-blue-700">
-            <a href="{{ path('app_job_show', {'id': job.id}) }}">
-            {{ job.title }}</a></h3>
-          <p class="text-gray-700">{{ job.company.name }} - {{ job.salaryrange }}</p>
+         <h3 class="text-xl font-bold text-blue-700">
+  {% if job.id %}
+    <a href="{{ path('app_job_show', {'id': job.id}) }}">
+      {{ job.title }}
+    </a>
+  {% else %}
+    <span class="text-red-500">[Invalid Job ID]</span>
+  {% endif %}
+</h3>
+          <p class="text-gray-700">{{ job.company.name }} — {{ job.minSalary }} - {{ job.maxSalary }}</p>
+          <p class="text-sm text-gray-500">Location: {{ job.city }}, {{ job.country }}</p>
           <p class="text-sm text-gray-500">
             Categories:
             {% if job.categories is not empty %}
-                {% for category in job.categories %}
-                    <span class="inline-block bg-gray-200 rounded px-2 py-1 text-xs mr-2">{{ category.type }}</span>
-                {% endfor %}
+              {% for category in job.categories %}
+                <span class="inline-block bg-gray-200 rounded px-2 py-1 text-xs mr-2">
+                  {{ category.type }}
+                </span>
+              {% endfor %}
             {% else %}
-                <span class="italic text-gray-400">No categories assigned</span>
+              <span class="italic text-gray-400">No categories assigned</span>
             {% endif %}
-        </p>
+          </p>
         </div>
       {% endfor %}
     {% else %}
-    <p class="text-gray-600 italic text-center mt-8">No jobs found matching your search criteria.</p>    {% endif %}
+      <p class="text-gray-600 italic text-center mt-8">No jobs found matching your search criteria.</p>
+      <div class="text-center mt-4">
+        <a href="{{ path('app_job_search') }}" class="text-blue-500 hover:underline">Try again</a>
+      </div>
+    {% endif %}
   </div>
+</section>
 {% endblock %}

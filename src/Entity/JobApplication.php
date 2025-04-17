@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Entity;
-use App\Entity\Job;
+
 use App\Repository\JobApplicationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Job;
 
 #[ORM\Entity(repositoryClass: JobApplicationRepository::class)]
 class JobApplication
@@ -15,10 +16,6 @@ class JobApplication
     private ?int $id = null;
 
     private ?string $name = null;
-
-
-    #[ORM\Column(length: 255)]
-    private ?string $fullName = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $coverLetter = null;
@@ -44,21 +41,6 @@ class JobApplication
         $this->name = $name;
         return $this;
     }
- 
-   // JobApplication.php
-public function getFullName(): ?string
-{
-    return trim(($this->firstName ?? '') . ' ' . ($this->lastName ?? ''));
-}
-
-
-public function setFullName(string $fullName): static
-{
-    $this->fullName = $fullName;
-
-    return $this;
-}
-
 
     public function getCoverLetter(): ?string
     {
@@ -68,7 +50,6 @@ public function setFullName(string $fullName): static
     public function setCoverLetter(string $coverLetter): static
     {
         $this->coverLetter = $coverLetter;
-
         return $this;
     }
 
@@ -80,7 +61,6 @@ public function setFullName(string $fullName): static
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
@@ -92,7 +72,7 @@ public function setFullName(string $fullName): static
     public function setJob(?Job $job): static
     {
         $this->job = $job;
-
         return $this;
     }
 }
+
