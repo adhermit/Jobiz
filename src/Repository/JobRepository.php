@@ -16,44 +16,44 @@ class JobRepository extends ServiceEntityRepository
         parent::__construct($registry, Job::class);
     }
 
-    public function findBySearch(?string $search, ?int $minSalary, ?int $maxSalary, ?string $country, ?string $city, ?int $categoryId = null): array
+    public function findBySearch(?string $search, ?int $minSalary, ?int $maxSalary, ?string $country, ?string $city, ?int $categoryId): array
     {
         $qb = $this->createQueryBuilder('j');
-
+    
         if ($search) {
             $qb->andWhere('j.title LIKE :search OR j.description LIKE :search')
                ->setParameter('search', '%' . $search . '%');
         }
-
+    
         if ($minSalary) {
             $qb->andWhere('j.minSalary >= :minSalary')
                ->setParameter('minSalary', $minSalary);
         }
-
+    
         if ($maxSalary) {
             $qb->andWhere('j.maxSalary <= :maxSalary')
                ->setParameter('maxSalary', $maxSalary);
         }
-
+    
         if ($country) {
             $qb->andWhere('j.country = :country')
                ->setParameter('country', $country);
         }
-
+    
         if ($city) {
             $qb->andWhere('j.city = :city')
                ->setParameter('city', $city);
         }
-
+    
         if ($categoryId) {
-            $qb->join('j.categories', 'c')
+            $qb->join('j.category', 'c')
                ->andWhere('c.id = :categoryId')
                ->setParameter('categoryId', $categoryId);
         }
     
         return $qb->getQuery()->getResult();
-        }
-
+    }
+    
     public function findPaginated(int $page, int $limit = 10): array
     {
         return $this->createQueryBuilder('j')
