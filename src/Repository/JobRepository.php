@@ -46,7 +46,7 @@ class JobRepository extends ServiceEntityRepository
         }
     
         if ($categoryId) {
-            $qb->join('j.category', 'c')
+            $qb->join('j.categories', 'c')
                ->andWhere('c.id = :categoryId')
                ->setParameter('categoryId', $categoryId);
         }
