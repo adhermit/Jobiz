@@ -38,6 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $username = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -77,15 +80,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUsername(): ?string
     {
-        return $this->firstName . ' ' . $this->lastName;
+        return $this->username;
     }
 
     public function setUsername(string $username): static
     {
-        $parts = explode(' ', $username, 2);
-        $this->firstName = $parts[0] ?? '';
-        $this->lastName = $parts[1] ?? '';
-
+        $this->username = $username;
         return $this;
     }
 
@@ -109,7 +109,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
