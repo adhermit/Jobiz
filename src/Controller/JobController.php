@@ -75,17 +75,17 @@ final class JobController extends AbstractController
         $form = $this->createForm(ApplyFormType::class, $application);
         $form->handleRequest($request);
 
+        $formSubmitted = false;
         if ($form->isSubmitted() && $form->isValid()) {
-            // Save the application data
             $em->persist($application);
             $em->flush();
-
-            // Add a success flash message
+        
             $this->addFlash('success', 'Your application has been submitted!');
-
-            // Redirect to the job detail page
-            return $this->redirectToRoute('app_job_show', ['id' => $job->getId()]);
+        
+            // Redirect with query param to indicate success
+            return $this->redirectToRoute('app_job_show', ['id' => $job->getId(), 'applied' => 1]);
         }
+        $formSubmitted = $request->query->get('applied') == 1;
 
 
         return $this->render('job/show.html.twig', [
@@ -95,6 +95,7 @@ final class JobController extends AbstractController
             'filteredJobs' => $filteredJobs,
             'search' => $search,
             'applyForm' => $form->createView(),
+            'formSubmitted' => $formSubmitted,
         ]);
     }
 
