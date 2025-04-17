@@ -36,6 +36,8 @@ class UserCrudController extends AbstractCrudController
         $fields = [
             IdField::new('id')->hideOnForm(),
             EmailField::new('email'),
+            TextField::new('first_name'),
+            TextField::new('last_name'),
             TextField::new('username'),
             ChoiceField::new('roles')->setChoices([
                 "ROLE_ADMIN" => "ROLE_ADMIN",

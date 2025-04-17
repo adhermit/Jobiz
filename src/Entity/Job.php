@@ -34,10 +34,10 @@ class Job
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $postDate = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $minSalary = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $maxSalary = null;
 
     /**
@@ -46,12 +46,14 @@ class Job
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'jobs')]
     private Collection $category;
 
-    #[ORM\ManyToOne(inversedBy: 'jobs')]
-    private ?Company $companies = null;
+    #[ORM\Column(type: 'string', length: 255)]    
+    private ?string $company = null;
 
     public function __construct()
     {
         $this->category = new ArrayCollection();
+        $this->minSalary = 0;
+        $this->maxSalary = 0;
     }
 
     public function getId(): ?int
@@ -71,14 +73,14 @@ class Job
         return $this;
     }
     
-    public function getCompany(): ?Company
+    public function getCompany(): string
     {
-        return $this->companies;
+        return $this->company;
     }
 
-    public function setCompany(?Company $company): static
+    public function setCompany(?string $company): self
     {
-        $this->companies = $company;
+        $this->company = $company;
 
         return $this;
     }
@@ -202,18 +204,6 @@ class Job
     public function removeCategory(Category $category): static
     {
         $this->category->removeElement($category);
-
-        return $this;
-    }
-
-    public function getCompanies(): ?Company
-    {
-        return $this->companies;
-    }
-
-    public function setCompanies(?Company $companies): static
-    {
-        $this->companies = $companies;
 
         return $this;
     }

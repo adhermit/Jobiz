@@ -38,9 +38,7 @@ class JobCrudController extends AbstractCrudController
                 'Internship' => 'Internship',
                 'Freelance' => 'Freelance',
             ]),
-            TextEditorField::new('companyName')->setLabel('Company Name'),
-            TextField::new('salaryRange')->setLabel('Salary Range (e.g., 3000-5000)'),
-            DateTimeField::new('postDate')->setFormat('dd/MM/yyyy'),
+            TextField::new('company'),
             AssociationField::new('category')
                 ->setFormTypeOption('choice_label', 'type'),
         ];

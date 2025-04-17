@@ -16,9 +16,16 @@ class JobApplication
 
     private ?string $name = null;
 
+    private ?string $fullname = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $fullName = null;
+    private ?string $subject = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+    #[ORM\Column(type: 'text')]
+    private ?string $message = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $coverLetter = null;
@@ -44,21 +51,56 @@ class JobApplication
         $this->name = $name;
         return $this;
     }
- 
-   // JobApplication.php
-public function getFullName(): ?string
-{
-    return trim(($this->firstName ?? '') . ' ' . ($this->lastName ?? ''));
-}
+
+    public function getFullName(): ?string
+    {
+        $this->fullname = (($this->firstName ?? '') . ' ' . ($this->lastName ?? ''));
+        return $this->fullname;
+    }
 
 
-public function setFullName(string $fullName): static
-{
-    $this->fullName = $fullName;
+    public function setFullName(string $fullName): static
+    {
+        $this->fullname = $fullName;
 
-    return $this;
-}
+        return $this;
+    }
 
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(string $subject): static
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(string $message): static
+    {
+        $this->message = $message;
+
+        return $this;
+    }
 
     public function getCoverLetter(): ?string
     {
