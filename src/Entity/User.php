@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    
     public function getUserIdentifier(): string
     {
         return $this->email;
@@ -39,6 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $username = null;
+
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -77,15 +79,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
+   
     public function getUsername(): ?string
     {
-        return $this->username;
+        return $this->firstName . ' ' . $this->lastName;
     }
 
     public function setUsername(string $username): static
     {
+
         $this->username = $username;
+        return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+
+    public function setFullName(string $fullName): static
+    {
+        $names = explode(' ', $fullName);
+        $this->firstName = $names[0];
+        $this->lastName = $names[1];
+
         return $this;
     }
 

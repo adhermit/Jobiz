@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\JobApplication;
 use App\Entity\Job;
+use App\Form\ApplyFormType;
 use App\Entity\User;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
@@ -12,8 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use League\CommonMark\CommonMarkConverter;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Compinent\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 final class JobController extends AbstractController
 {
@@ -40,7 +45,7 @@ final class JobController extends AbstractController
     }
 
     #[Route('/job/{id}', name: 'app_job_show')]
-    public function show(Request $request, Job $job, JobRepository $jobRepository, CategoryRepository $categoryRepository): Response
+    public function show(Request $request, Job $job, JobRepository $jobRepository, EntityManagerInterface $em,CategoryRepository $categoryRepository): Response
     {
         $search = $request->query->get('search');
         $minimumSalary = $request->query->get('minimum_salary');
@@ -56,12 +61,40 @@ final class JobController extends AbstractController
 
         $category = $categoryRepository->findAll();
 
+        $application = new JobApplication();
+        $application->setCreatedAt(new \DateTimeImmutable());
+        $application->setJob($job);
+    
+        $user = $this->getUser();
+
+        if ($user instanceof \App\Entity\User) {
+            $application->setFullName($user->getFullName());
+            $application->setName($user->getFullName());
+        }
+        // Create and handle the form for applying
+        $form = $this->createForm(ApplyFormType::class, $application);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Save the application data
+            $em->persist($application);
+            $em->flush();
+
+            // Add a success flash message
+            $this->addFlash('success', 'Your application has been submitted!');
+
+            // Redirect to the job detail page
+            return $this->redirectToRoute('app_job_show', ['id' => $job->getId()]);
+        }
+
+
         return $this->render('job/show.html.twig', [
             'job' => $job,
             'descriptionHtml' => $descriptionHtml,
             'categories' => $category,
             'filteredJobs' => $filteredJobs,
             'search' => $search,
+            'applyForm' => $form->createView(),
         ]);
     }
 
