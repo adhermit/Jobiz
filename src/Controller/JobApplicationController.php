@@ -26,7 +26,7 @@ final class JobApplicationController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $jobApplication = new JobApplication();
-        $form = $this->createForm(JobApplicationType::class, $jobApplication);
+        $form = $this->createForm(JobApplication::class, $jobApplication);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +53,7 @@ final class JobApplicationController extends AbstractController
     #[Route('/{id}/edit', name: 'app_job_application_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, JobApplication $jobApplication, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(JobApplicationType::class, $jobApplication);
+        $form = $this->createForm(JobApplication::class, $jobApplication);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

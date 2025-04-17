@@ -4,9 +4,31 @@
 
 {% block body %}
 <section class="bg-white">
+  <div class="container mx-auto px-5 py-10 flex flex-wrap lg:flex-nowrap">
+    <aside class="bg-light p-3 border-end mb-4 lg:w-1/4 w-full">
+      <form method="get" action="{{ path('app_job_search') }}" class="bg-white p-3 border rounded">
+          <h2>Search Jobs</h2>
+
+          <input type="text" name="search" placeholder="Search jobs" value="{{ app.request.get('search') }}" class="border p-2 rounded w-full mb-4" />
+          <input type="number" name="minimum_salary" placeholder="Minimum Salary" value="{{ app.request.get('minimum_salary') }}" class="border p-2 rounded w-full mb-4" />
+          <input type="number" name="maximum_salary" placeholder="Maximum Salary" value="{{ app.request.get('maximum_salary') }}" class="border p-2 rounded w-full mb-4" />
+          <input type="text" name="country" placeholder="Country" value="{{ app.request.get('country') }}" class="border p-2 rounded w-full mb-4" />
+          <input type="text" name="city" placeholder="City" value="{{ app.request.get('city') }}" class="border p-2 rounded w-full mb-4" />
+          <select name="category" class="border p-2 rounded w-full mb-4">
+              <option value="">All Categories</option>
+              {% for category in categories %}
+                  <option value="{{ category.id }}" {% if app.request.get('category') == category.id %}selected{% endif %}>
+                      {{ category.type }}
+                  </option>
+              {% endfor %}
+          </select>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+      </form>
+    </aside>
+
+  <div class="lg:w-3/4 w-full lg:pl-10">
   <div class="max-w-4xl mx-auto p-4 bg-white">
     <h2 class="text-2xl font-semibold mb-6">Search Results for "{{ search }}"</h2>
-
     {% if jobs is not empty %}
       {% for job in jobs %}
         <div class="border-b py-4">
@@ -48,6 +70,8 @@
         <a href="{{ path('app_job_search') }}" class="text-blue-500 hover:underline">Try again</a>
       </div>
     {% endif %}
+  </div>
+  </div>
   </div>
 </section>
 {% endblock %}
