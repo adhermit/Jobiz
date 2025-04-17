@@ -11,15 +11,22 @@
       {% for job in jobs %}
         <div class="border-b py-4">
          <h3 class="text-xl font-bold text-blue-700">
-  {% if job.id %}
-    <a href="{{ path('app_job_show', {'id': job.id}) }}">
-      {{ job.title }}
-    </a>
-  {% else %}
-    <span class="text-red-500">[Invalid Job ID]</span>
-  {% endif %}
-</h3>
-          <p class="text-gray-700">{{ job.company.name }} — {{ job.minSalary }} - {{ job.maxSalary }}</p>
+            {% if job.id %}
+              <a href="{{ path('app_job_show', {'id': job.id}) }}">
+                {{ job.title }}
+              </a>
+            {% else %}
+              <span class="text-red-500">[Invalid Job ID]</span>
+            {% endif %}
+        </h3>
+          <p class="text-gray-700">
+            {% if job.company is not null %}
+              {{ job.company.name }}
+            {% else %}
+              Company information not available.
+            {% endif %}
+            — {{ job.minSalary }} - {{ job.maxSalary }}
+          </p>
           <p class="text-sm text-gray-500">Location: {{ job.city }}, {{ job.country }}</p>
           <p class="text-sm text-gray-500">
             Categories:
