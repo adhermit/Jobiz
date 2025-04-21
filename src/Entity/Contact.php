@@ -1,47 +1,48 @@
 <?php
-
 namespace App\Entity;
 
-use App\Repository\ContactRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Dom\Text;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[ORM\Entity]
 class Contact
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $fullname = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Full Name should not be blank")]
+    private ?string $fullName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Email should not be blank")]
+    #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Subject should not be blank")]
     private ?string $subject = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank(message: "Message should not be blank")]
     private ?string $messages = null;
-
-    #[ORM\Column(length: 20)]
-    private ?string $status = 'unread';
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFullname(): ?string
+    public function getFullName(): ?string
     {
-        return $this->fullname;
+        return $this->fullName;
     }
 
-    public function setFullname(string $fullname): static
+    public function setFullName(string $fullName): self
     {
-        $this->fullname = $fullname;
+        $this->fullName = $fullName;
 
         return $this;
     }
@@ -51,7 +52,7 @@ class Contact
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -63,7 +64,7 @@ class Contact
         return $this->subject;
     }
 
-    public function setSubject(string $subject): static
+    public function setSubject(string $subject): self
     {
         $this->subject = $subject;
 
@@ -75,22 +76,8 @@ class Contact
         return $this->messages;
     }
 
-    public function setMessages(string $messages): static
+    public function setMessages(string $messages): void
     {
         $this->messages = $messages;
-
-        return $this;
     }
-
-    public function getStatus(): ?string
-{
-    return $this->status;
-}
-
-public function setStatus(string $status): static
-{
-    $this->status = $status;
-
-    return $this;
-}
 }
